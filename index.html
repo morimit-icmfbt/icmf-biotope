@@ -8,25 +8,18 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="theme-color" content="#2d5a3d">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="IcMF Biotope">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background-color: #2d5a3d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      font-family: sans-serif;
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#2d5a3d;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;gap:40px}
+    img{width:180px;height:180px;border-radius:50%}
+    .btn{display:block;background:white;color:#2d5a3d;text-decoration:none;font-size:18px;font-weight:bold;padding:16px 48px;border-radius:40px;letter-spacing:0.05em}
+    .hint{color:rgba(255,255,255,0.5);font-size:11px;text-align:center;line-height:1.8}
   </style>
-  <script>
-    // 即座にメンバーページへリダイレクト
-    window.location.replace("https://www.icmfguitar.com/member/");
-  </script>
 </head>
 <body>
-  <p style="color:white;">読み込み中...</p>
+  <img src="icon-512.png" alt="IcMF Biotope">
+  <a class="btn" href="https://www.icmfguitar.com/member/">Biotope 惣いの森へ</a>
+  <p class="hint">初回のみ：ホーム画面に追加してからボタンを押してください<br>2回目以降はアイコンをタップするだけです</p>
 </body>
 </html>
