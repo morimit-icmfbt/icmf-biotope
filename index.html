@@ -3,23 +3,252 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IcMF Biotope 惣いの森</title>
+  <title>響の杜 — IcMF</title>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <meta name="theme-color" content="#2d5a3d">
+  <meta name="theme-color" content="#0f1a12">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="IcMF Biotope">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="響の杜">
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:#2d5a3d;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;gap:40px}
-    img{width:180px;height:180px;border-radius:50%}
-    .btn{display:block;background:white;color:#2d5a3d;text-decoration:none;font-size:18px;font-weight:bold;padding:16px 48px;border-radius:40px;letter-spacing:0.05em}
-    .hint{color:rgba(255,255,255,0.5);font-size:11px;text-align:center;line-height:1.8}
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&display=swap');
+
+    :root {
+      --deep: #0f1a12;
+      --forest: #1c3220;
+      --moss: #2d5a3d;
+      --leaf: #4a8c5c;
+      --mist: rgba(180,220,190,0.12);
+      --gold: #c8a84b;
+      --text: #e8f0e8;
+      --soft: rgba(232,240,232,0.55);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--deep);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Noto Serif JP', serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 背景：波紋・木漏れ日 */
+    .bg-rings {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(74,140,92,0.15);
+      animation: expand 8s ease-out infinite;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%) scale(0);
+    }
+    .ring:nth-child(1){ animation-delay: 0s; }
+    .ring:nth-child(2){ animation-delay: 2.5s; }
+    .ring:nth-child(3){ animation-delay: 5s; }
+    @keyframes expand {
+      0%  { width:0;height:0; opacity:.6; }
+      100%{ width:900px;height:900px; opacity:0; }
+    }
+
+    /* 光の粒 */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .p {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0;
+      animation: float linear infinite;
+    }
+    @keyframes float {
+      0%   { opacity:0; transform: translateY(0) scale(0); }
+      20%  { opacity:.7; }
+      80%  { opacity:.4; }
+      100% { opacity:0; transform: translateY(-120px) scale(1.5); }
+    }
+
+    /* メインコンテンツ */
+    .container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      animation: fadeIn 1.8s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity:0; transform: translateY(16px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    /* アイコン */
+    .icon-wrap {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 1px solid rgba(74,140,92,0.4);
+      display: flex; align-items:center; justify-content:center;
+      margin-bottom: 32px;
+      box-shadow: 0 0 40px rgba(74,140,92,0.2), inset 0 0 20px rgba(74,140,92,0.05);
+      position: relative;
+    }
+    .icon-wrap::before {
+      content:'';
+      position:absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 1px solid rgba(74,140,92,0.15);
+    }
+    .icon-wrap img {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    /* アイコン画像がない場合のフォールバック */
+    .icon-wrap .fallback {
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    /* タイトル */
+    .title-jp {
+      font-size: 38px;
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: 0.25em;
+      line-height: 1;
+      margin-bottom: 6px;
+      text-shadow: 0 0 30px rgba(74,140,92,0.5);
+    }
+    .title-en {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--gold);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+
+    /* ボタン */
+    .enter-btn {
+      display: block;
+      position: relative;
+      padding: 16px 52px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      border: 1px solid rgba(74,140,92,0.5);
+      border-radius: 2px;
+      background: rgba(74,140,92,0.08);
+      transition: all 0.4s ease;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .enter-btn::before {
+      content:'';
+      position: absolute;
+      inset:0;
+      background: linear-gradient(135deg, rgba(74,140,92,0.2), transparent);
+      opacity:0;
+      transition: opacity 0.4s;
+    }
+    .enter-btn:hover::before { opacity:1; }
+    .enter-btn:hover {
+      border-color: rgba(74,140,92,0.9);
+      box-shadow: 0 0 20px rgba(74,140,92,0.2);
+      letter-spacing: 0.28em;
+    }
+    .enter-btn .arrow {
+      display: inline-block;
+      margin-right: 10px;
+      transition: transform 0.3s;
+    }
+    .enter-btn:hover .arrow { transform: translateX(4px); }
+
+    /* 案内文 */
+    .hint {
+      font-size: 11px;
+      color: rgba(180,210,185,0.4);
+      letter-spacing: 0.12em;
+      font-weight: 300;
+    }
+
+    /* 縦書き装飾テキスト */
+    .side-text {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      writing-mode: vertical-rl;
+      font-size: 10px;
+      color: rgba(74,140,92,0.25);
+      letter-spacing: 0.3em;
+      font-weight: 300;
+      z-index: 1;
+    }
   </style>
 </head>
 <body>
-  <img src="icon-512.png" alt="IcMF Biotope">
-  <a class="btn" href="https://www.icmfguitar.com/member/">Biotope 惣いの森へ</a>
-  <p class="hint">初回のみ：ホーム画面に追加してからボタンを押してください<br>2回目以降はアイコンをタップするだけです</p>
+
+  <!-- 波紋 -->
+  <div class="bg-rings">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+  </div>
+
+  <!-- 光の粒 -->
+  <div class="particles" id="particles"></div>
+
+  <!-- 縦書き -->
+  <div class="side-text">音と郷が響き合う場所</div>
+
+  <!-- メイン -->
+  <div class="container">
+    <div class="icon-wrap">
+      <img src="icon-512.png" alt="響の杜"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <span class="fallback" style="display:none">🌿</span>
+    </div>
+    <div class="title-jp">響の杜</div>
+    <div class="title-en">IcMF Biotopers</div>
+    <a class="enter-btn" href="https://www.icmfguitar.com/member/">
+      <span class="arrow">→</span>杜へ入る
+    </a>
+    <p class="hint">ホーム画面に追加してからお入りください</p>
+  </div>
+
+  <script>
+    // 光の粒を生成
+    var wrap = document.getElementById('particles');
+    for(var i=0;i<18;i++){
+      var p = document.createElement('div');
+      p.className='p';
+      p.style.left = (Math.random()*100)+'%';
+      p.style.top  = (20+Math.random()*70)+'%';
+      p.style.animationDuration = (4+Math.random()*6)+'s';
+      p.style.animationDelay   = (Math.random()*8)+'s';
+      p.style.width = p.style.height = (1+Math.random()*2)+'px';
+      wrap.appendChild(p);
+    }
+  </script>
 </body>
 </html>
